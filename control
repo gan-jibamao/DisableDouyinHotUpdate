@@ -1,0 +1,9 @@
+Package: com.xuuz.disablehotupdate
+Name: 禁用抖音热更新
+Version: 1.0.0
+Architecture: iphoneos-arm64
+Description: 禁用抖音 AWE 框架的动态补丁（热更新）数据模型 AWEDynamicPatchModel，热更新补丁静默失效。从 DouyinHelper 2.2-6 提取。
+Maintainer: xuuz
+Author: xuuz
+Section: Tweaks
+Depends: mobilesubstrate

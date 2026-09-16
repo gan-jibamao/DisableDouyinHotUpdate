@@ -1,0 +1,34 @@
+name: Build DisableDouyinHotUpdate
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Theos
+        uses: actions/cache@v4
+        with:
+          path: ~/theos
+          key: theos-latest
+      - run: |
+          if [ ! -d ~/theos ]; then
+            git clone --depth 1 https://github.com/theos/theos.git ~/theos
+          fi
+
+      - name: Build package
+        env:
+          THEOS: /Users/runner/theos
+        run: |
+          make clean || true
+          make package FINAL=1
+
+      - name: Upload deb
+        uses: actions/upload-artifact@v4
+        with:
+          name: disable-douyin-hotupdate
+          path: packages/*.deb
