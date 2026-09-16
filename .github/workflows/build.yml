@@ -10,30 +10,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Theos
+      - name: Cache Theos
         uses: actions/cache@v4
         with:
           path: ~/theos
-          key: theos-latest
-      - run: |
-          if [ ! -d ~/theos ]; then
-            git clone --depth 1 https://github.com/theos/theos.git ~/theos
-          fi
+          key: theos-full-v1
 
-      - name: Setup Theos vendor (sdks)
+      - name: Install Theos (official installer)
         run: |
-          # Use swift5 toolchain bundled with Xcode; vendor sdk: use iPhoneOS SDK via sdks repo
-          if [ ! -d ~/theos/sdks ]; then
-            mkdir -p ~/theos/sdks
-            git clone --depth 1 https://github.com/theos/sdks.git ~/theos/sdks
+          if [ ! -f ~/theos/bin/update-theos ] || [ ! -d ~/theos/vendor/include ]; then
+            rm -rf ~/theos
+            bash -c "$(curl -fsSL https://raw.githubusercontent.com/theos/theos/master/bin/install-theos)"
           fi
-
-      - name: Install dm.pl (dpkg)
-        run: |
-          curl -fsSL -o ~/theos/bin/dm.pl https://raw.githubusercontent.com/theos/dm.pl/master/dm.pl
-          chmod +x ~/theos/bin/dm.pl
-          sudo ln -sf ~/theos/bin/dm.pl /usr/local/bin/dm.pl
-          echo "$HOME/theos/bin" >> $GITHUB_PATH
 
       - name: Build package
         env:
