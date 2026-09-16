@@ -20,6 +20,14 @@ jobs:
             git clone --depth 1 https://github.com/theos/theos.git ~/theos
           fi
 
+      - name: Setup Theos vendor (sdks)
+        run: |
+          # Use swift5 toolchain bundled with Xcode; vendor sdk: use iPhoneOS SDK via sdks repo
+          if [ ! -d ~/theos/sdks ]; then
+            mkdir -p ~/theos/sdks
+            git clone --depth 1 https://github.com/theos/sdks.git ~/theos/sdks
+          fi
+
       - name: Install dm.pl (dpkg)
         run: |
           curl -fsSL -o ~/theos/bin/dm.pl https://raw.githubusercontent.com/theos/dm.pl/master/dm.pl
