@@ -20,6 +20,13 @@ jobs:
             git clone --depth 1 https://github.com/theos/theos.git ~/theos
           fi
 
+      - name: Install dm.pl (dpkg)
+        run: |
+          curl -fsSL -o ~/theos/bin/dm.pl https://raw.githubusercontent.com/theos/dm.pl/master/dm.pl
+          chmod +x ~/theos/bin/dm.pl
+          sudo ln -sf ~/theos/bin/dm.pl /usr/local/bin/dm.pl
+          echo "$HOME/theos/bin" >> $GITHUB_PATH
+
       - name: Build package
         env:
           THEOS: /Users/runner/theos
